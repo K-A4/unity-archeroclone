@@ -31,6 +31,7 @@ public class Player
     public Vector3 LookDir
     {
         get { return rigidBody.transform.forward; }
+        set { rigidBody.transform.forward = value; }
     }
 
     public Quaternion Rotation
@@ -60,6 +61,4 @@ public class Player
     {
         rigidBody.AddForce(force);
     }
-
-   
 }

@@ -8,15 +8,17 @@ public class PlayerFireHandler : ITickable, IDisposable
     private readonly SignalBus signalBus;
     private readonly Settings fireSettings;
     private readonly Player player;
+    private readonly Bullet.Pool bulletPool;
 
     private float timeToFire;
-    private float firePeriod { get => fireSettings.FireRate / 60.0f; } 
+    private float firePeriod { get => 60.0f / fireSettings.FireRate; } 
 
-    public PlayerFireHandler(Settings fireSettings, Player player, SignalBus signalBus)
+    public PlayerFireHandler(Settings fireSettings, Player player, SignalBus signalBus, Bullet.Pool bulletPool)
     {
         this.fireSettings = fireSettings;
         this.player = player;
         this.signalBus = signalBus;
+        this.bulletPool = bulletPool;
         signalBus.Subscribe<PlayerInput.StartFire>(StartFire);
         signalBus.Subscribe<PlayerInput.StopFire>(StopFire);
     }
@@ -24,6 +26,7 @@ public class PlayerFireHandler : ITickable, IDisposable
     public void StartFire()
     {
         firing = true;
+        timeToFire = Time.time + (firePeriod / 10.0f);
     }
 
     public void StopFire()
@@ -45,7 +48,11 @@ public class PlayerFireHandler : ITickable, IDisposable
 
     private void Fire()
     {
-        Debug.Log("Fire");
+
+        var bullet = bulletPool.Spawn(fireSettings.Speed, fireSettings.Damage);
+
+        bullet.transform.position = player.Position;
+        bullet.transform.rotation = player.Rotation;
     }
 
     public void Dispose()
@@ -58,6 +65,9 @@ public class PlayerFireHandler : ITickable, IDisposable
     public class Settings
     {
         public float FireRate;
+        public float Speed;
         public float Damage;
+        public float CheckRadius;
+        public LayerMask LayerMask;
     }
 }

@@ -17,3 +17,13 @@ MonoBehaviour:
     BoundaryAdjustForce: 0
     MoveSpeed: 5.5
     Acceleration: 200
+  PlayerFiring:
+    FireRate: 150
+    Speed: 40
+    Damage: 35
+    CheckRadius: 20
+    LayerMask:
+      serializedVersion: 2
+      m_Bits: 8
+  GameInstaller:
+    BulletPrefab: {fileID: 1273711018817074035, guid: fb7b8e50c6ae6df43999a699e6aaf3bb, type: 3}
