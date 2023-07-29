@@ -1,34 +1,39 @@
+using System;
 using UnityEngine;
 using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
-    [Inject]
-    Settings settings = null;
+    [Inject] private readonly Settings settings;
 
     public override void InstallBindings()
     {
         GameSignalInstaller.Install(Container);
-
-        //Container.BindFactory<float, float, float, BulletType, Bullet, Bullet.Factory>()
-        //        .FromPoolableMemoryPool<float, float, float, BulletType, Bullet, BulletPool>(poolBinder => poolBinder
-        //            .WithInitialSize(10)
-        //            .FromComponentInNewPrefab(settings.BulletPrefab)
-        //            .UnderTransformGroup("Bullets"));
-        Container.BindMemoryPool<Bullet, Bullet.Pool>()
-            .WithInitialSize(10)
-            .WithMaxSize(15)
-            .FromComponentInNewPrefab(settings.BulletPrefab)
-            .UnderTransformGroup("Bullets");
+        Container.BindInterfacesAndSelfTo<GameStarter>().AsSingle();
+        BindBullets();
+        BindEnemies();
+        Container.Bind<LevelBounds>().AsSingle();
     }
 
-    [System.Serializable]
+    private void BindBullets()
+    {
+        Container.BindFactory<float, float, Bullet, Bullet.Factory>()
+                    .FromMonoPoolableMemoryPool(poolBinder => poolBinder
+                    .WithInitialSize(10)
+                    .WithMaxSize(15)
+                    .FromComponentInNewPrefab(settings.BulletPrefab)
+                    .UnderTransformGroup("Bullets"));
+    }
+
+    private void BindEnemies()
+    {
+        Container.Bind<EnemySpawner>().AsSingle();
+    }
+
+    [Serializable]
     public class Settings
     {
         public GameObject BulletPrefab;
+        public GameObject Door;
     }
-
-    //class BulletPool : MonoPoolableMemoryPool<float, float, float, BulletType, IMemoryPool, Bullet>
-    //{
-    //}
 }

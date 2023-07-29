@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 
 public class VirtualGamepad : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-
     public Vector2 Value { get => value; }
 
     public UnityEvent OnClick;

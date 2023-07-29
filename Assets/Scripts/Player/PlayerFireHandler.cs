@@ -8,17 +8,27 @@ public class PlayerFireHandler : ITickable, IDisposable
     private readonly SignalBus signalBus;
     private readonly Settings fireSettings;
     private readonly Player player;
-    private readonly Bullet.Pool bulletPool;
-
+    private readonly Bullet.Factory bulletFactory;
+    private readonly PlayerRotation playerRotation;
+    private readonly GameStarter gameStarter;
     private float timeToFire;
     private float firePeriod { get => 60.0f / fireSettings.FireRate; } 
 
-    public PlayerFireHandler(Settings fireSettings, Player player, SignalBus signalBus, Bullet.Pool bulletPool)
+    public PlayerFireHandler(
+        Settings fireSettings, 
+        Player player, 
+        SignalBus signalBus, 
+        Bullet.Factory bulletFactory, 
+        PlayerRotation playerRotation, 
+        GameStarter gameStarter)
     {
         this.fireSettings = fireSettings;
         this.player = player;
         this.signalBus = signalBus;
-        this.bulletPool = bulletPool;
+        this.bulletFactory = bulletFactory;
+        this.playerRotation = playerRotation;
+        this.gameStarter = gameStarter;
+
         signalBus.Subscribe<PlayerInput.StartFire>(StartFire);
         signalBus.Subscribe<PlayerInput.StopFire>(StopFire);
     }
@@ -36,7 +46,7 @@ public class PlayerFireHandler : ITickable, IDisposable
 
     public void Tick()
     {
-        if (firing)
+        if (playerRotation.RotatedOnEnemy && gameStarter.GameStarted && firing)
         {
             if (timeToFire < Time.time)
             {
@@ -48,11 +58,11 @@ public class PlayerFireHandler : ITickable, IDisposable
 
     private void Fire()
     {
-
-        var bullet = bulletPool.Spawn(fireSettings.Speed, fireSettings.Damage);
+        var bullet = bulletFactory.Create(fireSettings.Speed, fireSettings.Damage);
 
         bullet.transform.position = player.Position;
         bullet.transform.rotation = player.Rotation;
+        bullet.gameObject.layer = LayerMask.NameToLayer("Shot");
     }
 
     public void Dispose()

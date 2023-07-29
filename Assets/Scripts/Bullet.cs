@@ -2,24 +2,26 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public enum BulletType
-{ 
-    Enemy,
-    Player
-}
-
 public class Bullet : MonoBehaviour, IPoolable<float, float, IMemoryPool>, IDisposable
 {
-    [SerializeField] private LayerMask layerMask;
     private float speed;
     private float damage;
     private IMemoryPool pool;
+    private Settings settings;
+    private float startTime;
+
+    [Inject]
+    public void Construct(Settings settings)
+    {
+        this.settings = settings;
+    }
 
     public void OnSpawned(float speed, float damage, IMemoryPool pool)
     {
         this.speed = speed;
         this.damage = damage;
         this.pool = pool;
+        startTime = Time.time;
     }
 
     public void OnDespawned()
@@ -29,8 +31,8 @@ public class Bullet : MonoBehaviour, IPoolable<float, float, IMemoryPool>, IDisp
 
     public void Update()
     {
-
         Fly();
+        DespawnIfLifeTimeGone();
     }
 
     private void Fly()
@@ -43,13 +45,21 @@ public class Bullet : MonoBehaviour, IPoolable<float, float, IMemoryPool>, IDisp
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void DespawnIfLifeTimeGone()
     {
-        if (other.TryGetComponent(out IHittable hittable))
+        if (Time.time - startTime > settings.LifeTime)
+        {
+            pool.Despawn(this);
+        }
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.TryGetComponent(out IHittable hittable))
         {
             hittable.TakeDamage(damage);
+            pool.Despawn(this);
         }
-        pool.Despawn(this);
     }
 
     public void Dispose()
@@ -57,8 +67,13 @@ public class Bullet : MonoBehaviour, IPoolable<float, float, IMemoryPool>, IDisp
         pool.Despawn(this);
     }
 
-    public class Pool : MonoMemoryPool<float, float, Bullet>
+    public class Factory : PlaceholderFactory<float, float, Bullet>
     {
+    }
 
+    [Serializable]
+    public class Settings
+    {
+        public float LifeTime;
     }
 }

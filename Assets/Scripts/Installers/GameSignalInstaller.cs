@@ -1,4 +1,3 @@
-using UnityEngine;
 using Zenject;
 
 public class GameSignalInstaller : Installer<GameSignalInstaller>
@@ -9,5 +8,9 @@ public class GameSignalInstaller : Installer<GameSignalInstaller>
 
         Container.DeclareSignal<PlayerInput.StartFire>();
         Container.DeclareSignal<PlayerInput.StopFire>();
+        Container.DeclareSignal<StartGame>();
+        Container.DeclareSignal<EnemyDied>();
+        Container.DeclareSignal<AllEnemiesDied>();
+        Container.DeclareSignal<EnterDoor>();
     }
 }
