@@ -3,9 +3,11 @@ using Zenject;
 
 public class PlayerInstaller : MonoInstaller
 {
-    [SerializeField] private Settings settings = null;
+    [SerializeField]
+    private Settings settings = null;
 
-    [SerializeField] private VirtualGamepad vg = null;
+    [SerializeField]
+    private VirtualGamepad vg = null;
 
     public override void InstallBindings()
     {
@@ -16,7 +18,6 @@ public class PlayerInstaller : MonoInstaller
         Container.BindInterfacesTo<PlayerMovement>().AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerRotation>().AsSingle();
         Container.BindInterfacesAndSelfTo<NearestEnemyFinder>().AsSingle();
-        Container.Bind<MoneyCollector>().AsSingle();
     }
 
     [System.Serializable]

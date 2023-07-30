@@ -4,14 +4,17 @@ using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
-    [Inject] private readonly Settings settings;
+    [Inject]
+    private readonly Settings settings;
+    [SerializeField] 
+    private ParticleSpawner particleSpawner;
 
     public override void InstallBindings()
     {
-        GameSignalInstaller.Install(Container);
         Container.BindInterfacesAndSelfTo<GameStarter>().AsSingle();
         BindBullets();
         BindEnemies();
+        Container.BindInstance(particleSpawner).AsSingle();
         Container.Bind<LevelBounds>().AsSingle();
     }
 

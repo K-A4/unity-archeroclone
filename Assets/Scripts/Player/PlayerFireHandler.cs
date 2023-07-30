@@ -11,6 +11,7 @@ public class PlayerFireHandler : ITickable, IDisposable
     private readonly Bullet.Factory bulletFactory;
     private readonly PlayerRotation playerRotation;
     private readonly GameStarter gameStarter;
+    private readonly ParticleSpawner particleSpawner;
     private float timeToFire;
     private float firePeriod { get => 60.0f / fireSettings.FireRate; } 
 
@@ -20,7 +21,8 @@ public class PlayerFireHandler : ITickable, IDisposable
         SignalBus signalBus, 
         Bullet.Factory bulletFactory, 
         PlayerRotation playerRotation, 
-        GameStarter gameStarter)
+        GameStarter gameStarter,
+        ParticleSpawner particleSpawner)
     {
         this.fireSettings = fireSettings;
         this.player = player;
@@ -28,6 +30,7 @@ public class PlayerFireHandler : ITickable, IDisposable
         this.bulletFactory = bulletFactory;
         this.playerRotation = playerRotation;
         this.gameStarter = gameStarter;
+        this.particleSpawner = particleSpawner;
 
         signalBus.Subscribe<PlayerInput.StartFire>(StartFire);
         signalBus.Subscribe<PlayerInput.StopFire>(StopFire);
@@ -60,6 +63,8 @@ public class PlayerFireHandler : ITickable, IDisposable
     private void Fire()
     {
         var bullet = bulletFactory.Create(fireSettings.Speed, fireSettings.Damage);
+
+        particleSpawner.PlayShot(player.Position, player.LookDir);
 
         bullet.transform.position = player.Position;
         bullet.transform.rotation = player.Rotation;
