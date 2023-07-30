@@ -31,6 +31,7 @@ public class PlayerFireHandler : ITickable, IDisposable
 
         signalBus.Subscribe<PlayerInput.StartFire>(StartFire);
         signalBus.Subscribe<PlayerInput.StopFire>(StopFire);
+        signalBus.Subscribe<AllEnemiesDied>(StopFire);
     }
 
     public void StartFire()
@@ -69,6 +70,7 @@ public class PlayerFireHandler : ITickable, IDisposable
     {
         signalBus.Unsubscribe<PlayerInput.StartFire>(StartFire);
         signalBus.Unsubscribe<PlayerInput.StopFire>(StopFire);
+        signalBus.Unsubscribe<AllEnemiesDied>(StopFire);
     }
 
     [System.Serializable]

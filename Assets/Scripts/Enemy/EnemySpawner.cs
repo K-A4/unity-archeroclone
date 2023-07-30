@@ -32,15 +32,13 @@ public class EnemySpawner : IDisposable
         for (int i = 0; i < levelInfo.EnemyPrefabs.Count; i++)
         {
             var prefabs = levelInfo.EnemyPrefabs;
-            for (int j = 0; j < prefabs.Count; j++)
+            
+            var prefab = prefabs[i].EnemyPrefab;
+            for (int k = 0; k < prefabs[i].Quantity; k++)
             {
-                var prefab = prefabs[j].EnemyPrefab;
-                for (int k = 0; k < prefabs[j].Quantity; k++)
-                {
-                    var enemy = container.InstantiatePrefab(prefab).GetComponent<EnemyFacade>();
-                    enemies.Add(enemy.Transform);
-                    enemy.Transform.position = GetRandomSpawnPosition();
-                }
+                var enemy = container.InstantiatePrefab(prefab).GetComponent<EnemyFacade>();
+                enemies.Add(enemy.Transform);
+                enemy.Transform.position = GetRandomSpawnPosition();
             }
         }
     }

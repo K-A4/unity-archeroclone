@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class EnemyHealth : MonoBehaviour, IHittable
+public class EnemyHealth : MonoBehaviour
 {
     private Player player;
     private Settings settings;

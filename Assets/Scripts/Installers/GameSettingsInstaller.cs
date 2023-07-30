@@ -12,6 +12,7 @@ public class GameSettingsInstaller : ScriptableObjectInstaller<GameSettingsInsta
     public NearestEnemyFinder.Settings EnemyFinder;
     public LevelBounds.Settings LevelBounds;
     public Levels.LevelsSettings levelsSettings;
+    public GameStarter.Settings GameStarter;
 
     public override void InstallBindings()
     {
@@ -23,5 +24,6 @@ public class GameSettingsInstaller : ScriptableObjectInstaller<GameSettingsInsta
         Container.BindInstance(LevelBounds).IfNotBound();
         Container.BindInstance(EnemyFinder).IfNotBound();
         Container.BindInstance(levelsSettings).IfNotBound();
+        Container.BindInstance(GameStarter).IfNotBound();
     }
 }

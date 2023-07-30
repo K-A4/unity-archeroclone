@@ -15,10 +15,10 @@ MonoBehaviour:
   PlayerMovement:
     BoundaryBuffer: 0
     BoundaryAdjustForce: 0
-    MoveSpeed: 5.5
-    Acceleration: 200
+    MoveSpeed: 7
+    Acceleration: 300
   PlayerFiring:
-    FireRate: 120
+    FireRate: 180
     Speed: 20
     Damage: 35
     CheckRadius: 20
@@ -47,7 +47,7 @@ MonoBehaviour:
         EnemyPrefab: {fileID: 2094637970031465100, guid: 48d4d8b784ae33e458367365d12a2095, type: 3}
       DoorPosition: {x: 0, y: 2, z: 10}
     - EnemyPrefabs:
-      - Quantity: 3
+      - Quantity: 2
         EnemyPrefab: {fileID: 2094637970031465100, guid: 48d4d8b784ae33e458367365d12a2095, type: 3}
       - Quantity: 1
         EnemyPrefab: {fileID: 601950335875044537, guid: 8ac89a68fed56654daf82dc672ad3bd4, type: 3}
@@ -58,3 +58,5 @@ MonoBehaviour:
       - Quantity: 3
         EnemyPrefab: {fileID: 601950335875044537, guid: 8ac89a68fed56654daf82dc672ad3bd4, type: 3}
       DoorPosition: {x: 0, y: 2, z: 10}
+  GameStarter:
+    TimeToStart: 3

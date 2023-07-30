@@ -2,7 +2,7 @@ using System;
 using Zenject;
 using UnityEngine;
 
-public class EnemyFacade : MonoBehaviour
+public class EnemyFacade : MonoBehaviour, IHittable
 {
     public int MoneyValue
     {
@@ -15,11 +15,18 @@ public class EnemyFacade : MonoBehaviour
     }
 
     private Settings settings;
+    private EnemyHealth health;
 
     [Inject]
-    public void Construct(Settings settings)
+    public void Construct(Settings settings, EnemyHealth health)
     {
         this.settings = settings;
+        this.health = health;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health.TakeDamage(damage);
     }
 
     [Serializable]
